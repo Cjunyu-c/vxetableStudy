@@ -2,7 +2,7 @@
   <div class="my-filter-content">
     <div class="my-fc-search">
       <div class="my-fc-search-top">
-        <vxe-input v-model="option.data.sVal" placeholder="搜索"></vxe-input>
+        <vxe-input v-model="option.data.sVal" @input="searchEvent" placeholder="搜索" suffix-icon="fa fa-search"></vxe-input>
       </div>
       <div class="my-fc-search-content">
         <template v-if="valList.length">
@@ -30,65 +30,67 @@
 </template>
 
 <script>
-import XEUtils from 'xe-utils'
+import XEUtils from "xe-utils";
 
 export default {
-  name: 'FilterContent',
+  name: "FilterContent",
   props: {
-    params: Object
+    params: Object,
   },
-  data () {
+  data() {
     return {
-      size: 'mini',
+      size: "mini",
       isAll: false,
       option: null,
       colValList: [],
-      valList: []
-    }
+      valList: [],
+    };
   },
-  created () {
-    this.load()
+  created() {
+    this.load();
   },
   methods: {
-    load () {
-      const { $table, column } = this.params
-      const { fullData } = $table.getTableData()
-      const option = column.filters[0]
-      const { vals } = option.data
-      const colValList = Object.keys(XEUtils.groupBy(fullData, column.field)).map(val => {
+    load() {
+      const { $table, column } = this.params;
+      const { fullData } = $table.getTableData();
+      const option = column.filters[0];
+      const { vals } = option.data;
+      const colValList = Object.keys(XEUtils.groupBy(fullData, column.property)).map((val) => {
+       
         return {
           checked: vals.includes(val),
-          value: val
-        }
-      })
-      this.option = option
-      this.colValList = colValList
-      this.valList = colValList
+          value: val,
+        };
+      });
+      this.option = option;
+      this.colValList = colValList;
+      this.valList = colValList;
     },
-    searchEvent () {
-      const { option, colValList } = this
-      this.valList = option.data.sVal ? colValList.filter(item => item.value.indexOf(option.data.sVal) > -1) : colValList
+    searchEvent() {
+      const { option, colValList } = this;
+      this.valList = option.data.sVal ? colValList.filter((item) => item.value.indexOf(option.data.sVal) > -1) : colValList;
     },
-    changeAllEvent () {
-      const { isAll } = this
-      this.valList.forEach(item => {
-        item.checked = isAll
-      })
+    changeAllEvent() {
+      const { isAll } = this;
+      this.valList.forEach((item) => {
+        item.checked = isAll;
+      });
     },
-    confirmFilterEvent (evnt) {
-      const { params, option, valList } = this
-      const { data } = option
-      const { $panel } = params
-      data.vals = valList.filter(item => item.checked).map(item => item.value)
-      $panel.changeOption(evnt, true, option)
-      $panel.confirmFilter()
+    confirmFilterEvent(evnt) {
+      const { params, option, valList } = this;
+      const { data } = option;
+      const { $panel } = params;
+      data.vals = valList.filter((item) => item.checked).map((item) => item.value);
+
+      $panel.changeOption(evnt, true, option);
+      $panel.confirmFilter();
     },
-    resetFilterEvent () {
-      const { $panel } = this.params
-      $panel.resetFilter()
-    }
-  }
-}
+    resetFilterEvent() {
+      const { $panel } = this.params;
+      $panel.resetFilter();
+    },
+  },
+};
 </script>
 
 <style>
@@ -101,7 +103,7 @@ export default {
   padding: 5px 0;
 }
 .my-filter-content .my-fc-search .my-fc-search-top > input {
-  border: 1px solid #ABABAB;
+  border: 1px solid #ababab;
   padding: 0 20px 0 2px;
   width: 200px;
   height: 22px;

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- <i class="el-icon-setting" style="font-size: 16px; cursor: pointer; position: absolute; right: 0; top: 0" @click="tableSetting"></i> -->
     <vxe-table
       ref="xGrid"
       border
@@ -18,9 +19,9 @@
       @menu-click="contextMenuClickEvent"
     >
       <vxe-column type="seq" width="60"></vxe-column>
-
       <vxe-column
         v-for="config in data"
+        v-if="config.slots"
         :key="config.key"
         :type="config.type"
         :field="config.field"
@@ -31,15 +32,8 @@
         :filters="config.filters"
         :filter-render="config?.filterRender"
       >
-        <template #default="{ row }">
-          1
-          <!-- <slot :name="config?.slots?.default" v-bind="row"></slot>
-                 -->
-          <span>11{{ row.booking_date }}</span>
-        </template>
       </vxe-column>
     </vxe-table>
-    <i class="el-icon-setting" style="font-size: 16px; cursor: pointer; position: absolute; right: 0; top: 0" @click="tableSetting"></i>
 
     <div class="table-b-f-b mb0" v-if="pagination">
       <el-pagination
@@ -65,7 +59,8 @@
 <script>
 import VXETable from "vxe-table";
 import Sortable from "sortablejs";
-import tabelSetting from "@/components/common/XtableSetting.vue";
+import tabelSetting from "./XtableSetting.vue";
+import XEClipboard from "xe-clipboard";
 export default {
   components: {
     tabelSetting,
@@ -116,7 +111,6 @@ export default {
       immediate: true,
       handler(newValue) {
         this.$nextTick(() => {
-          console.log(33455, newValue);
           this.tableList2 = newValue;
           this.$nextTick(() => {
             this.$refs.xGrid.reloadData(this.tableList2);
@@ -159,7 +153,6 @@ export default {
           extendSlot.push(...slots);
         }
       });
-      console.log(4566, extendSlot);
       return [...extendSlot];
     },
   },
@@ -186,7 +179,6 @@ export default {
       value.forEach((item, index) => {
         this.$set(this.data[index], "visible", item.visible);
       });
-      console.log(1233, this.tableProps.columns);
       this.$nextTick(() => {
         this.$refs.xGrid.refreshColumn();
         this.$refs.xGrid.reloadColumn(this.tableProps.columns);
@@ -217,8 +209,10 @@ export default {
     cellDblclick({ row }) {},
 
     async saveStorage() {
+      return;
       let versions = undefined;
       versions = this.tableData.Versions + 1;
+      //  TODO换成公司保存列头接口即可
       const res = await Serviceface.post(`/api/lwms/v1/OA_ClientDIYColumn/save`, {
         ClientId: sessionStorage.getItem("user_id"),
         ColumnDetails: JSON.string(this.data),
@@ -262,8 +256,7 @@ export default {
             const currRow = this.data.splice(oldColumnIndex, 1)[0];
             this.data.splice(newColumnIndex, 0, currRow);
             $table.loadColumn(fullColumn); //列重载
-            console.log(11111, this.data);
-            this.saveStorage();
+            // this.saveStorage();
           },
         });
       });

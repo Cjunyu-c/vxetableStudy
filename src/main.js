@@ -5,11 +5,11 @@ import 'element-ui/lib/theme-chalk/index.css';
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/style.css'
 import _ from "lodash"
-//我的是创建在根目录的config下,所以@/config/vxetableRenderer.js
-import './components/vxetableRenderer.js';
-import './components/render/jest.js';
+import './components/vxetableCommon/table/renderer/index.js';
+import plugins from '../src/utils/plugins.js'
 Vue.config.productionTip = false
 Vue.use(ElementUI);
+Vue.use(plugins)
 Vue.use(VXETable)
 Vue.prototype._ = _;
 new Vue({

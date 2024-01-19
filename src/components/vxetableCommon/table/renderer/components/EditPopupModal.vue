@@ -1,21 +1,20 @@
 <template>
-  <div class="edit-down-modal">
-    <vxe-input class="edit-down-input" v-model="row[column.field]" @keyup="keyupEvent"></vxe-input>
-    <vxe-button class="edit-popup-button" status="primary" @click="popupEvent">选择</vxe-button>
+  <div class="edit-popup-modal">
+    <vxe-input class="edit-popup-input" v-model="row[column.property]" placeholder="请选择"></vxe-input>
+    <vxe-button class="edit-popup-button" icon="fa fa-list" type="text" @click="popupEvent"></vxe-button>
     <vxe-modal
       show-footer
       class-name="vxe-table--ignore-clear edit-popup-box"
-      title="选择多条"
       width="800"
       height="400"
       v-model="modalVisible"
       @confirm="confirmEvent">
       <template #default>
         <vxe-grid
+          highlight-hover-row
           auto-resize
           ref="xGrid"
           height="auto"
-          :row-config="{isHover: true}"
           :loading="loading"
           :pager-config="tablePage"
           :data="tableData"
@@ -29,7 +28,7 @@
 
 <script>
 export default {
-  name: 'EditDownModal',
+  name: 'EditPopupModal',
   props: {
     params: Object
   },
@@ -40,11 +39,6 @@ export default {
       modalVisible: false,
       loading: false,
       tableData: [],
-      tableColumn1: [
-        { field: 'name', title: 'Name' },
-        { field: 'role', title: 'Role' },
-        { field: 'sex', title: 'Sex' }
-      ],
       tableColumn: [
         { type: 'checkbox', width: 80 },
         { field: 'name', title: 'Name' },
@@ -98,42 +92,25 @@ export default {
         this.tableData = data
       })
     },
-    keyupEvent () {
-      const { row, column } = this
-      const cellValue = row[column.field]
-      this.loading = true
-      this.getData().then(data => {
-        this.loading = false
-        if (cellValue) {
-          this.tableData = data.filter(item => item.name.indexOf(cellValue) > -1)
-        } else {
-          this.tableData = data
-        }
-      })
-    },
     confirmEvent () {
       const { row, column } = this
       const selectRecords = this.$refs.xGrid.getCheckboxRecords()
-      row[column.field] = `${selectRecords.length}条`
+      row[column.property] = `${selectRecords.length}条`
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.edit-down-modal {
+.edit-popup-modal {
   display: flex;
   align-items: center;
 }
-.edit-down-pulldown {
+.edit-popup-input {
   width: auto;
   flex-grow: 1;
 }
-:deep(.edit-down-input .vxe-input--inner) {
-  border-radius: 4px 0 0 4px;
-}
-.edit-popup-button.vxe-button {
+.edit-popup-button {
   flex-shrink: 0;
-  border-radius: 0 4px 4px 0;
 }
 </style>

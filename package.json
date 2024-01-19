@@ -15,7 +15,10 @@
     "vue": "^2.6.14",
     "vxe-table": "^3.7.7",
     "xe-clipboard": "^1.10.2",
-    "xe-utils": "^3.5.14"
+    "xe-utils": "^3.5.14",
+    "postcss": "^8.2.15",
+    "sass": "^1.56.1",
+    "sass-loader": "^12.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

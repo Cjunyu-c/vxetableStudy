@@ -2,14 +2,14 @@
   <div class="edit-down-table">
     <vxe-pulldown class="edit-down-pulldown" ref="xDown" transfer>
       <template>
-        <vxe-input class="edit-down-input" v-model="row[column.field]" @keyup="keyupEvent" @click="clickEvent" @suffix-click="suffixClick"></vxe-input>
+        <vxe-input class="edit-down-input" v-model="row[column.property]" suffix-icon="fa fa-caret-down" @keyup="keyupEvent" @click="clickEvent" @suffix-click="suffixClick"></vxe-input>
       </template>
       <template #dropdown>
         <div class="edit-down-wrapper">
           <vxe-grid
+            highlight-hover-row
             auto-resize
             height="auto"
-            :row-config="{isHover: true}"
             :loading="loading"
             :pager-config="tablePage"
             :data="tableData"
@@ -81,7 +81,7 @@ export default {
     },
     keyupEvent () {
       const { row, column } = this
-      const cellValue = row[column.field]
+      const cellValue = row[column.property]
       this.loading = true
       this.getData().then(data => {
         this.loading = false
@@ -106,7 +106,7 @@ export default {
     },
     selectEvent (params) {
       const { row, column } = this
-      row[column.field] = params.row.name
+      row[column.property] = params.row.name
       this.$refs.xDown.hidePanel()
     }
   }

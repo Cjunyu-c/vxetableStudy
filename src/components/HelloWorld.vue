@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import TableCom from "./TableComXGrid.vue";
+import TableCom from "./vxetableCommon/compoment/TableComXGrid.vue";
 import XEClipboard from "xe-clipboard";
 import XEUtils from "xe-utils";
 import VXETable from "vxe-table";
@@ -46,20 +46,16 @@ export default {
       gridOptions: {
         size: "mini",
         border: true,
-        showHeaderOverflow: true,
-        showOverflow: true,
-        keepSource: true,
         showFooter: true,
         height: "600",
         class: "sortable-column-demo",
-        rowId: "id",
-        rowConfig: {
-          isHover: true,
-        },
+        // rowId: "id",//放开会导致区域拖拽失效
+        showOverflow: true,
+        //行配置,这里的行高一定需要指定
+        rowConfig: { isCurrent: true, height: 24, isHover: true },
         columnConfig: {
           resizable: true,
           useKey: true,
-          minWidth: 200,
         },
         scrollX: {
           enabled: false,
@@ -73,7 +69,6 @@ export default {
         keyboardConfig: {
           isArrow: true,
         },
-        customConfig: { storage: true },
         toolbarConfig: {
           slots: {
             buttons: "toolbar_buttons",
@@ -113,8 +108,8 @@ export default {
             title: "订舱日期",
             visible: true,
             sortable: true,
-            filters: [{ data: null }],
-            filterRender: { name: "FilterInput" },
+            filters: [{ data: { vals: [], sVal: "", fMenu: "", f1Type: "", f1Val: "", fMode: "and", f2Type: "", f2Val: "" } }],
+            filterRender: { name: "FilterExtend" },
             slots: {
               default: "booking_date_default",
             },
@@ -141,8 +136,22 @@ export default {
             field: "booking_status",
             title: "订舱状态",
             visible: true,
-            filters: [{ data: null }],
-            filterRender: { name: "FilterInput" },
+            // filters: [{ data: null }],
+            // filterRender: { name: "FilterInput" },
+            filterRender: { name: "MLFilterRender" },
+            filters: [
+              {
+                data: {
+                  vals: [],
+                  sVal: "",
+                  operator1: "空白",
+                  value1: "",
+                  operator2: "空白",
+                  value2: "",
+                  concat: "与",
+                },
+              },
+            ],
             sortable: true,
             // slots: { filter: "booking_status_filter" },
           },
@@ -169,8 +178,8 @@ export default {
             title: "联系电话",
             visible: true,
             sortable: true,
-            filters: [{ data: null }],
-            filterRender: { name: "FilterInput" },
+            filters: [{ data: { vals: [], sVal: "", fMenu: "", f1Type: "", f1Val: "", fMode: "and", f2Type: "", f2Val: "" } }],
+            filterRender: { name: "FilterExtend" },
             // slots: { filter: "agent_phone_filter" },
           },
           {
@@ -208,11 +217,11 @@ export default {
             booking_no: "T1",
             type: "Develop",
             booking_status: "1",
-            booking_agent_name: 28,
+            booking_agent_name: 21,
             agent_name: "test abc",
-            agent_phone: 28,
+            agent_phone: 21,
             start_port: "test abc",
-            dest_port: 28,
+            dest_port: 21,
             transfer_port: "test abc",
           },
           {
@@ -221,11 +230,11 @@ export default {
             booking_no: "T2",
             type: "Develop",
             booking_status: "2",
-            booking_agent_name: 28,
+            booking_agent_name: 22,
             agent_name: "test abc",
-            agent_phone: 28,
+            agent_phone: 22,
             start_port: "test abc",
-            dest_port: 28,
+            dest_port: 22,
             transfer_port: "test abc",
           },
           {
@@ -234,11 +243,11 @@ export default {
             booking_no: "T3",
             type: "Develop",
             booking_status: "3",
-            booking_agent_name: 28,
+            booking_agent_name: 23,
             agent_name: "test abc",
-            agent_phone: 28,
+            agent_phone: 23,
             start_port: "test abc",
-            dest_port: 28,
+            dest_port: 23,
             transfer_port: "test abc",
           },
           {
@@ -247,11 +256,11 @@ export default {
             booking_no: "T4",
             type: "Develop",
             booking_status: "4",
-            booking_agent_name: 28,
+            booking_agent_name: 24,
             agent_name: "test abc",
-            agent_phone: 28,
+            agent_phone: 24,
             start_port: "test abc",
-            dest_port: 28,
+            dest_port: 24,
             transfer_port: "test abc",
           },
           {
@@ -260,11 +269,11 @@ export default {
             booking_no: "T5",
             type: "Develop",
             booking_status: "5",
-            booking_agent_name: 28,
+            booking_agent_name: 25,
             agent_name: "test abc",
-            agent_phone: 28,
+            agent_phone: 25,
             start_port: "test abc",
-            dest_port: 28,
+            dest_port: 25,
             transfer_port: "test abc",
           },
           {
@@ -273,11 +282,11 @@ export default {
             booking_no: "T6",
             type: "Develop",
             booking_status: "6",
-            booking_agent_name: 28,
+            booking_agent_name: 26,
             agent_name: "test abc",
-            agent_phone: 28,
+            agent_phone: 26,
             start_port: "test abc",
-            dest_port: 28,
+            dest_port: 26,
             transfer_port: "test abc",
           },
           {
@@ -286,11 +295,11 @@ export default {
             booking_no: "T7",
             type: "Develop",
             booking_status: "7",
-            booking_agent_name: 28,
+            booking_agent_name: 27,
             agent_name: "test abc",
-            agent_phone: 28,
+            agent_phone: 27,
             start_port: "test abc",
-            dest_port: 28,
+            dest_port: 27,
             transfer_port: "test abc",
           },
           {
@@ -307,6 +316,7 @@ export default {
             transfer_port: "test abc",
           },
         ],
+        footerMethod: this.footerMethod,
         footerData: [],
       },
 
@@ -354,17 +364,17 @@ export default {
         this.MessageTips(4, "请输入正确的页数");
         return;
       }
-      // TODO重新获取表格数据;
+      // this.getData();
     },
     handleCurrentChange(val) {
       this.formData.pageIndex = val;
       this.tableData.pageIndex = val;
-      // TODO重新获取表格数据;
+      // this.getData();
     },
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("formData");
-      // TODO重新获取表格数据;
+      // this.getData();
     },
 
     contextMenuClickEvent({ menu, row, column }) {
@@ -389,7 +399,11 @@ export default {
       }
     },
     summarymethod({ columns, data }) {
-      return [this.Tabletotals({ columns, data }, ``)];
+      return [this.Tabletotal({ columns, data }, ``)];
+    },
+    footerMethod({ columns, data }) {
+      // 接收二维数组
+      return [this.Tabletotal({ columns, data }, [1, 2], [1, 2], ``)];
     },
   },
 };

@@ -1,18 +1,19 @@
 <template>
   <div id="app">
-    <XGridTable />
+
+    <HelloWorld msg="Welcome to Your Vue.js App"/>
   </div>
 </template>
 
 <script>
-import XGridTable from "./components/XGridTable.vue";
+import HelloWorld from './components/HelloWorld.vue'
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
-    XGridTable,
-  },
-};
+    HelloWorld
+  }
+}
 </script>
 
 <style>

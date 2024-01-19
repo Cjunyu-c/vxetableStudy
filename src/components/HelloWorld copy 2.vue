@@ -1,25 +1,32 @@
 <template>
   <div class="content-inter-box">
     <div class="white-box table-outer-box">
+    
+
       <div class="table-box-tpp">
         <TableCom
-          ref="tableData"
-          :tableList="tableData.list"
-          :tableColumn="tableColumns"
-          :menuConfig="menuConfig"
+           :table-list="tableList"
+           :tableColumn="tableColumns"
+           :menuConfig="menuConfig"
           :formDatas="formData"
           :pagination="true"
           :tableData="tableData"
           @contextMenuClickEvent="contextMenuClickEvent"
           :summarymethod="summarymethod"
-          @handleCurrentChange="handleCurrentChange"
+           @handleCurrentChange="handleCurrentChange"
           @handleSizeChange="handleSizeChange"
-          Storage="TestBooking1"
-          :Versions="tableData.Versions"
         >
-          <template #booking_date_default="{ row }">
-            <span>￥1{{ row }}</span>
-          </template>
+            <!-- <template #booking_date_default="{ row }">
+              111
+            <span>￥{{row.booking_date}}</span>
+
+            </template> -->
+            <template #booking_date_default="{ row }">
+    <span>￥1{{row}}</span>
+  </template>
+          <!-- <template #booking_date_default="prop">
+              <span>￥{{prop.col.booking_date}}</span>
+          </template> -->
         </TableCom>
       </div>
     </div>
@@ -27,7 +34,7 @@
 </template>
 
 <script>
-import TableCom from "./TableComXTable.vue";
+import TableCom from "./TableCom.vue";
 import XEClipboard from "xe-clipboard";
 import XEUtils from "xe-utils";
 import VXETable from "vxe-table";
@@ -38,33 +45,33 @@ export default {
   },
   data() {
     return {
-      menuConfig: {
-        className: "my-menus",
-        body: {
-          options: [
-            [
-              {
-                code: "copy",
-                name: "复制",
-                prefixIcon: "vxe-icon-copy",
-                className: "my-copy-item",
-              },
-              {
-                code: "edit",
-                name: "编辑",
-                prefixIcon: "vxe-icon-edit",
-              },
-              {
-                code: "delete",
-                name: "删除",
-                prefixIcon: "vxe-icon-delete color-red",
-              },
+       menuConfig: {
+          className: "my-menus",
+          body: {
+            options: [
+              [
+                {
+                  code: "copy",
+                  name: "复制",
+                  prefixIcon: "vxe-icon-copy",
+                  className: "my-copy-item",
+                },
+                {
+                  code: "edit",
+                  name: "编辑",
+                  prefixIcon: "vxe-icon-edit",
+                },
+                {
+                  code: "delete",
+                  name: "删除",
+                  prefixIcon: "vxe-icon-delete color-red",
+                },
+              ],
             ],
-          ],
+          },
         },
-      },
 
-      tableColumns: [
+       tableColumns: [
         {
           key: 2,
           slots: { default: "booking_date_default" },
@@ -213,7 +220,7 @@ export default {
         Versions: 0,
         Storage: "TestBooking",
       },
-      tableList: [
+      tableList:[
         {
           id: 10001,
           booking_date: "Test1",
@@ -242,7 +249,7 @@ export default {
         },
         {
           id: 10003,
-          booking_date: "Test3",
+           booking_date: "Test3",
           booking_no: "T3",
           type: "Develop",
           booking_status: "3",
@@ -255,7 +262,7 @@ export default {
         },
         {
           id: 10004,
-          booking_date: "Test4",
+         booking_date: "Test4",
           booking_no: "T4",
           type: "Develop",
           booking_status: "4",
@@ -268,7 +275,7 @@ export default {
         },
         {
           id: 10005,
-          booking_date: "Test5",
+           booking_date: "Test5",
           booking_no: "T5",
           type: "Develop",
           booking_status: "5",
@@ -294,7 +301,7 @@ export default {
         },
         {
           id: 10007,
-          booking_date: "Test7",
+           booking_date: "Test7",
           booking_no: "T7",
           type: "Develop",
           booking_status: "7",
@@ -325,8 +332,10 @@ export default {
       selection: {},
     };
   },
-  async mounted() {},
-
+  async mounted() {
+   
+  },
+  
   methods: {
     selectionChange(v) {
       this.checkBoxList = v;
@@ -377,6 +386,7 @@ export default {
     summarymethod({ columns, data }) {
       return [this.Tabletotals({ columns, data }, ``)];
     },
+   
   },
 };
 </script>
